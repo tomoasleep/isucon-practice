@@ -6,12 +6,13 @@ require 'dalli'
 require 'rack/session/dalli'
 require 'erubis'
 require 'tempfile'
-
+require 'rack-mini-profiler'
 
 class Isucon3App < Sinatra::Base
   @@config = JSON.parse(IO.read(File.dirname(__FILE__) + "/../config/#{ ENV['ISUCON_ENV'] || 'local' }.json"))['database']
 
   $stdout.sync = true
+  use Rack::MiniProfiler
   use Rack::Session::Dalli, {
     :key => 'isucon_session_rubyxx',
     :cache => Dalli::Client.new('localhost:11211')
