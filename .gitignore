@@ -8,5 +8,4 @@ bench/data/init.sql.gz
 bench/data/latest
 bench/cpanfile.snapshot
 bench/local/
-init.sh
 
