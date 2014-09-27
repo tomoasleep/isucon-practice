@@ -5,16 +5,13 @@ set :application, 'isucon_practice'
 set :repo_url, 'git@github.com:tomoasleep/isucon-practice.git'
 
 # Default branch is :master
-# ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
+ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/home/isu-user/isucon-repo'
 
 # Default value for :scm is :git
 set :scm, :git
-
-# Ask branch to deploy
-set :branch, ask('branch to deploy', 'master')
 
 # Default value for :format is :pretty
 # set :format, :pretty
