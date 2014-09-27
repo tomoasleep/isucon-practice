@@ -153,7 +153,7 @@ class Isucon3App < Sinatra::Base
     user  = get_user
     require_user(user)
 
-    memos = mysql.xquery('SELECT id, content, is_private, created_at, updated_at FROM memos WHERE user=? ORDER BY created_at DESC', user["id"])
+    memos = mysql.xquery('SELECT id, title, content, is_private, created_at, updated_at FROM memos WHERE user=? ORDER BY created_at DESC', user["id"])
     erb :mypage, :layout => :base, :locals => {
       :user  => user,
       :memos => memos,
@@ -164,7 +164,7 @@ class Isucon3App < Sinatra::Base
     mysql = connection
     user  = get_user
 
-    memo = mysql.xquery('SELECT id, user, content, is_private, created_at, updated_at FROM memos WHERE id=?', params[:memo_id]).first
+    memo = mysql.xquery('SELECT id, title, user, content, is_private, created_at, updated_at FROM memos WHERE id=?', params[:memo_id]).first
     unless memo
       halt 404, "404 Not Found"
     end
@@ -208,9 +208,10 @@ class Isucon3App < Sinatra::Base
     anti_csrf
 
     mysql.xquery(
-      'INSERT INTO memos (user, content, is_private, created_at) VALUES (?, ?, ?, ?)',
+      'INSERT INTO memos (user, content, title, is_private, created_at) VALUES (?, ?, ?, ?, ?)',
       user["id"],
       params["content"],
+      params["content"].split(/\r?\n/).first,
       params["is_private"].to_i,
       Time.now,
     )
