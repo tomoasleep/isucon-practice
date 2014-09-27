@@ -7,7 +7,10 @@ require 'rack/session/dalli'
 require 'erubis'
 require 'tempfile'
 
+
 class Isucon3App < Sinatra::Base
+  @@config = JSON.parse(IO.read(File.dirname(__FILE__) + "/../config/#{ ENV['ISUCON_ENV'] || 'local' }.json"))['database']
+
   $stdout.sync = true
   use Rack::Session::Dalli, {
     :key => 'isucon_session_rubyxx',
@@ -18,8 +21,8 @@ class Isucon3App < Sinatra::Base
     set :erb, :escape_html => true
 
     def connection
-      config = JSON.parse(IO.read(File.dirname(__FILE__) + "/../config/#{ ENV['ISUCON_ENV'] || 'local' }.json"))['database']
       return $mysql if $mysql
+      config = @@config
       $mysql = Mysql2::Client.new(
         :host => config['host'],
         :port => config['port'],
